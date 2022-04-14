@@ -24,4 +24,5 @@ limitations under the License. -->
 \n\nI\'ll be happy to teach you how to make your own aquarium.
 \nYou should ask someone else about fishing, though.\n\n
     </string>
+    <string name="nickname_hint">What is your nickname?</string>
 </resources>
