@@ -20,8 +20,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.example.android.aboutme.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -37,9 +38,11 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         // Add a click handler to the Done button that displays the inputted text in the TextView and hides the EditText and button.
 
@@ -57,17 +60,33 @@ class MainActivity : AppCompatActivity() {
         // Using findViewById (older approach than using Kotlin extensions plugin):
         // findViewById<Button>(R.id.done_button).setOnClickListener {  }
 
-        // Using the Kotlin extensions plugin (instead of having to use older findViewById approach):
-        done_button.setOnClickListener {
+        // Using Kotlin synthetics via the Kotlin extensions plugin (instead of having to use older findViewById approach) - avoid as will soon be deprecated
+        // + doesn't provide type safety at compile time:
+//        done_button.setOnClickListener {
+//            addNickname(it)
+//        }
+
+        // Using Data Binding (instead of Kotlin synthetics or findViewById) as this is the most modern and best approach as it provides
+        // type safety at compile time:
+        binding.doneButton.setOnClickListener {
             addNickname(it)
         }
     }
 
     private fun addNickname(view: View) {
-        nickname_text.text = nickname_edit.text
-        view.visibility = View.GONE
-        nickname_edit.visibility = View.GONE
-        nickname_text.visibility = View.VISIBLE
+        // Using the 'apply' block is a shortcut for calling binding.X on every line,
+        // e.g. binding.nicknameText.text becomes nicknameText.text, and so on for every line
+        binding.apply {
+            nicknameText.text = binding.nicknameEdit.text
+
+            // Refresh the UI with the new data by invalidating all existing binding expressions to make these expressions get created again with the new data
+            // - we did this because in the line above we updated the data contained within the binding object - i.e. we updated the 'text' property inside of binding.nicknameText
+            invalidateAll()
+
+            doneButton.visibility = View.GONE
+            nicknameEdit.visibility = View.GONE
+            nicknameText.visibility = View.VISIBLE
+        }
 
         // After the 'done' button is clicked, hide the keyboard:
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
