@@ -16,8 +16,13 @@
 
 package com.example.android.aboutme
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -36,6 +41,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO (04) Add a click handler for the Done button to process the input and update the visibility of the views
+        // Add a click handler to the Done button that displays the inputted text in the TextView and hides the EditText and button.
+
+        // Get a reference to the done button
+
+        // Add a click handler to the done button
+
+        // When 'done' button is clicked, we should:
+            // get the value that the user has inputted into the nickname_edit editable text field
+            // set the value of the nickname result field (with ID nickname_text) to be the value entered into the editable text field
+            // hide the done_button - visibility = gone
+            // hide the nickname_edit field - visibility = gone
+            // show the result field by changing the visibility of the nickname_text field to 'visible'
+
+        // Using findViewById (older approach than using Kotlin extensions plugin):
+        // findViewById<Button>(R.id.done_button).setOnClickListener {  }
+
+        // Using the Kotlin extensions plugin (instead of having to use older findViewById approach):
+        done_button.setOnClickListener {
+            addNickname(it)
+        }
+    }
+
+    private fun addNickname(view: View) {
+        nickname_text.text = nickname_edit.text
+        view.visibility = View.GONE
+        nickname_edit.visibility = View.GONE
+        nickname_text.visibility = View.VISIBLE
+
+        // After the 'done' button is clicked, hide the keyboard:
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
