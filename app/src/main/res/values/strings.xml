@@ -25,4 +25,5 @@ limitations under the License. -->
 \nYou should ask someone else about fishing, though.\n\n
     </string>
     <string name="nickname_hint">What is your nickname?</string>
+    <string name="done">DONE</string>
 </resources>
